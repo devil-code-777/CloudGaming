@@ -18,8 +18,10 @@
     
 2. RDP into the instance, copy-paste the Powershell Scripts onto the instance and run part 1 of the scripts
 3. Reboot
-4. Run part 2 of the scripts
-5. Install the games that you want to play in the cloud
+4. From now on, you can access via VNC rather than RDP, so RDP does not interfere with the virtual monitors you are creating for Parsec
+5. Run part 2 of the scripts
+6. Deactivate your internal graphics card in device manager and disable any monitors attached to it in your Windows Graphics Settings
+7. Install the games that you want to play in the cloud
 
 ## Setting up future Spot instances to save money
 1. Create an image and snapshot from the instance that you have now set up and configured
