@@ -11,7 +11,7 @@
 ## Setting up your primary instance
 1. Create a g4dn instance (you can create a g4dn.xlarge for the initial setup and scale it up later to save money) with the following settings:
     1. Microsoft Windows Server 2019 Base AMI 
-    2. Nothing to configure in "Instance Details" (you might have to create a VPN and Subnet if you don't already have them)
+    2. Nothing to configure in "Instance Details" (you might have to create a VPC and Subnet if you don't already have them)
     3. In "Add Storage" resize your root drive to fit your games' needs - e.g. for Fallen Order I'd recommend about 90GB. Don't oversize it as this will cost money and make your Snapshot later on unnecessarily large
     4. Use the security group previously created
     5. Launch the instance
