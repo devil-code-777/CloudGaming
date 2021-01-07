@@ -4,7 +4,7 @@ $ScriptWebArchive = "https://parsecscripts.s3.amazonaws.com/Parsec-Cloud-Prepara
 <# Set AWS Credentials #>
 Write-host "Please enter your AWS IAM Credntials:"
 $AwsAccessKey = Read-host "Access Key"
-$AwsSecretKey = Read-host "Secret Key" -AsSecureString
+$AwsSecretKey = Read-host "Secret Key"
 
 <# Set Windows Administrator PAssword #>
 $Password = Read-Host "Enter a new Windows Password for Administrator" -AsSecureString
