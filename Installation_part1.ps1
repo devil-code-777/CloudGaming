@@ -49,3 +49,4 @@ foreach ($Object in $Objects) {
 Write-Host "Please wait before starting the NVidia Installation until Parsec has finished installing"
 <# Launch Graphics Driver Installation #>
 Start-Process -Filepath "C:\Users\Administrator\Desktop\GraphicsDriver\Windows\445.87_grid_vgaming_win10_64bit_international_whql.exe" -Wait
+Write-Host "You have finished the first part of the installation. Please reboot and launch the second PowerShell script."
