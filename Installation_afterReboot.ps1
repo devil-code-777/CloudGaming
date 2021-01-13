@@ -1,15 +1,20 @@
 ﻿<# Set Variables for Download URLs #>
 $VCRedistLocation = "https://aka.ms/vs/16/release/vc_redist.x86.exe"  
-$TightVNCLocation = "https://www.tightvnc.com/download/2.8.59/tightvnc-2.8.59-gpl-setup-64bit.msi"  
 $SteamLocation = "https://cdn.cloudflare.steamstatic.com/client/installer/SteamSetup.exe"  
 $OriginLocation = "https://www.dm.origin.com/download"  
 
 <# Set VM Resolution #>
-$Screenwidth = 1920
 $Screenwidth = Read-Host "Set your Screen width (Pixels) - default 1920"
-$Screenheight = 1080
+    if($Screenwidth -eq "") {
+    $Screenwidth = 1920
+        Write-host "Screenwidth set to 1920px"}
+        else {Write-host "Screenwidth set to $Screenwidth"}
 $Screenheight = Read-Host "Set your Screen height (Pixels) - default 1080"
-Write-host "You have set the screen resolution to $Screenwidth x $Screenheight. This will be reapplied at every startup."
+    if($Screenheight -eq "") {
+    $Screenheight = 1080
+        Write-host "Screenheight set to 1080px"}
+        else {Write-host "Screenheight set to $Screenwidth"}
+Write-host "You have set the screen resolution to $Screenwidth x $Screenheight. This will be reapplied at every startup." 
 
 
 <# Once Graphics driver is installed: Update Registry #>
@@ -36,7 +41,7 @@ Switch ($ReadHost){
 Write-host "Creating Scripts Directory in C:\Users\Administrator\Documents\Scripts"
 New-Item -Path 'C:\Users\Administrator\Documents\Scripts' -ItemType Directory
 New-Item C:\Users\Administrator\Documents\Scripts\SetResolution.ps1
-Set-Content C:\Users\Administrator\Documents\Scripts\SetResolution.ps1 'Set-DisplayResolution -Width 1920 -Height 1080 -Force'
+Set-Content C:\Users\Administrator\Documents\Scripts\SetResolution.ps1 'Set-DisplayResolution -Width $Screenwidth -Height $Screenwidth -Force'
 New-Item C:\Users\Administrator\Documents\Scripts\Startup.bat
 Set-Content C:\Users\Administrator\Documents\Scripts\Startup.bat '@ECHO OFF
 PowerShell -Command "Set-ExecutionPolicy Unrestricted" >> "%TEMP%\StartupLog.txt" 2>&1
@@ -61,23 +66,34 @@ Start-Process -Filepath "$VCRedistLocalPath.exe" -ArgumentList '/S /quiet /nores
 Write-host "Visual C++ Installed"
 
 
-<# Download and Install TightVNC Server #>
-Write-host "Installing TightVNC Server"
-$TightVNCLocalPath = "$ENV:UserProfile\Downloads\TightVNCServer"  
-(New-Object System.Net.WebClient).DownloadFile($TightVNCLocation, "$TightVNCLocalPath.msi")  
-Start-Process msiexec.exe -Wait -ArgumentList '/I C:\Users\Administrator\Downloads\TightVNCServer.msi /quiet'
-$ipinfo = Invoke-RestMethod http://ipinfo.io/json | Select -exp ip
-Write-host "TightVNC Server installed. Connect to VNC Server via IP Address: "$ipinfo
+$ReadHostSteam = Read-Host "Do you want to install Steam? (Y/N)"
+Switch ($ReadHostSteam){
+    Y {
+        <# Download and Install Steam #>
+        Write-host "Installing Steam"
+        $SteamLocalPath = "$ENV:UserProfile\Downloads\Steam"  
+        (New-Object System.Net.WebClient).DownloadFile($SteamLocation, "$SteamLocalPath.exe") 
+        Start-Process -Filepath "$SteamLocalPath.exe" -ArgumentList '/S' -Wait
+        Write-host "Steam installed"
+        }
+    N {
+        Return
+        }
+    }
 
-<# Download and Install Steam #>
-Write-host "Installing Steam"
-$SteamLocalPath = "$ENV:UserProfile\Downloads\Steam"  
-(New-Object System.Net.WebClient).DownloadFile($SteamLocation, "$SteamLocalPath.exe") 
-Start-Process -Filepath "$SteamLocalPath.exe" -ArgumentList '/S' -Wait
-Write-host "Steam installed"
+$ReadHostSteam = Read-Host "Do you want to install EA Origin? (Y/N)"
+Switch ($ReadHostSteam){
+    Y {
+        <# Download Origin #>
+        "Installing Origin - this is a manual setup process. Please take over once the Origin Window opens"
+        $OriginLocalPath = "$ENV:UserProfile\Downloads\Origin" 
+        (New-Object System.Net.WebClient).DownloadFile($OriginLocation, "$OriginLocalPath.exe") 
+        Start-Process -Filepath "$OriginLocalPath.exe"
+        }
+    N {
+        Return
+        }
+    }
 
-<# Download Origin #>
-"Installing Origin - this is a manual setup process. Please take over once the Origin Window opens"
-$OriginLocalPath = "$ENV:UserProfile\Downloads\Origin" 
-(New-Object System.Net.WebClient).DownloadFile($OriginLocation, "$OriginLocalPath.exe") 
-Start-Process -Filepath "$OriginLocalPath.exe"
+<# TODO: Add cleanup script#>
+<# TODO: Update Display settings https://12noon.com/?page_id=641#>
